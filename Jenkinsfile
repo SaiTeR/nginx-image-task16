@@ -64,7 +64,7 @@ pipeline {
                         docker pull ${env.REGISTRY}/nginx:latest
 
                         echo "Running new container..."
-                        docker run -d --name ${env.CONTAINER_NAME} -p 80:80 -p 443:443 -e APACHE_IP=${env.APACHE_IP} -e APACHE_PORT=${env.APACHE_PORT} ${env.REGISTRY}/apache:latest
+                        docker run -d --name ${env.CONTAINER_NAME} -p 80:80 -p 443:443 -e APACHE_IP=${env.APACHE_IP} -e APACHE_PORT=${env.APACHE_PORT} ${env.REGISTRY}/nginx:latest
                         """
                     }
                 }
