@@ -54,7 +54,7 @@ pipeline {
                         ssh ubuntu@${env.NGINX_IP} << EOF
 
                         echo "Stopping and removing old container..."
-                        docker stop ${env.NGINX} || true
+                        docker stop ${env.CONTAINER_NAME} || true
                         docker rm ${env.CONTAINER_NAME} || true
 
                         echo "Removing old image..."
