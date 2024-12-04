@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Second NGINX page</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            display: flex;
+
+            align-items: center;
+            flex-direction: column;
+            font-family: Arial, sans-serif;
+        }
+
+        .title {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .links {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        button {
+            width: 300px; /* Фиксированная ширина для всех кнопок */
+            height: 50px; /* Фиксированная высота для всех кнопок */
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            text-align: center; /* Выровнять текст по центру по горизонтали */
+            vertical-align: middle; /* Выровнять текст по вертикали */
+            display: flex;
+            align-items: center;
+            justify-content: center; /* Центровка текста внутри кнопки */
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        a {
+            text-decoration: none; /* Убирает подчеркивание у ссылок */
+        }
+
+        a:hover {
+            text-decoration: none; /* Убирает подчеркивание при наведении */
+        }
+    </style>
+</head>
+<body>
+    <div class="title">
+        <h1>Second</h1>
+        <h1>page</h1>
+    </div>
+
+    <div class="links">
+        <a href="/">
+            <button>Назад</button>
+        </a>
+    </div>
+</body>
+</html>

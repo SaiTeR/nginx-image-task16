@@ -1,0 +1,103 @@
+log_format redblue_log '$remote_addr - $remote_user [$time_local] '
+                                   '"$request" $status $body_bytes_sent '
+                                   '"$http_referer" "$http_user_agent" '
+                                   '"Reverse Proxy Upstream: $upstream_addr" "$upstream_status"';
+
+
+
+upstream redblue_balancer {
+    server localhost:8081;
+    server localhost:8082;
+}
+
+server {
+    listen 443 ssl; # managed by Certbot
+
+    server_name _;
+
+    ssl_certificate /etc/letsencrypt/live/saiter.serveminecraft.net/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/saiter.serveminecraft.net/privkey.pem; # managed by Certbot
+
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+
+
+    root /var/www/nginx_serv;
+    index index.html;
+
+    location / {
+        try_files $uri $uri/ =404;
+    }
+
+    location /secondpage {
+        alias /var/www/nginx_serv;
+        index secondpage.html;
+    }
+
+    location /music {
+        alias /var/www/nginx_serv/music/;
+        
+        default_type application/octet-stream;
+        add_header Content-Disposition "attachment; filename=smoke.mp3";
+        
+        try_files /smoke.mp3 =404;
+    }
+
+
+    location /info.php {
+        proxy_pass http://${APACHE_IP}:${APACHE_PORT};
+    }
+
+    location /secondserver {
+        proxy_pass https://www.google.com/;
+    }
+
+
+    location /redblue {
+        proxy_pass http://redblue_balancer;
+
+        access_log /var/log/nginx/redblue_access.log redblue_log;
+    }
+
+    location /image1 {
+        rewrite ^/image1/(.*\.jpg)$ /images/$1 break;
+
+        image_filter rotate 180;
+        image_filter_buffer 10M;
+
+        types {
+            image/jpg jpg;
+        }
+        default_type image/jpg;
+        try_files $uri =415;
+    }
+
+    location /image2 {
+        rewrite ^/image2/(.*\.png)$ /images/$1 break;
+
+        types {
+            image/png png;
+        }
+        default_type image/png;
+        
+        try_files $uri =415;
+    }
+
+
+    location /cpu {
+        default_type application/json;
+        gzip off;
+
+        fastcgi_pass unix:/var/run/fcgiwrap.socket;
+        fastcgi_param SCRIPT_FILENAME /var/www/nginx_serv/get_cpu_usage.sh;
+        fastcgi_param SCRIPT_NAME get_cpu_usage.sh;
+        fastcgi_param REQUEST_METHOD GET;
+    }
+}
+
+server {
+    listen 80;
+    server_name _;
+    
+    return 301 https://$host$request_uri;
+}

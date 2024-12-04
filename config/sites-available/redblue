@@ -1,0 +1,23 @@
+# Red
+server {
+    listen 8081;
+    server_name localhost;
+
+    location / {
+        default_type text/html;
+        return 200 '<html><body style="background-color:red;"></body></html>';
+        add_header Content-Type text/html;
+    }
+}
+
+# Blue
+server {
+    listen 8082;
+    server_name localhost;
+
+    location / {
+        default_type text/html;
+        return 200 '<html><body style="background-color:blue;"></body></html>';
+        add_header Content-Type text/html;
+    }
+}
